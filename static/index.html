@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io();
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+    </head>
+    <body>
+            <canvas id="myChart" width="400" height="400"></canvas>
+            <script>
+            const ctx = document.getElementById("myChart").getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    "labels": [0,1,2,3,4,5],
+                    datasets: [{
+                        data: [1,1,1,5,3,1],
+                        lineTension: 0.1,
+                        fill: false
+                    }],
+                },
+                options: {}
+            });
+
+            socket.on('data update', (msg) => {
+                const dataPoints = JSON.parse(msg);
+                chart.data.labels = dataPoints.labels;
+                chart.data.datasets[0].data = dataPoints.data;
+                chart.update();
+            })
+
+            socket.on('new state', (msg) => {
+                console.log(msg)
+            });
+            </script>
+    </body>
+</html>
