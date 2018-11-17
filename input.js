@@ -24,6 +24,10 @@ module.exports.parseInput = function parseInput(data) {
 
 module.exports.processInput = function processInput(state = {}, data) {
     data.forEach(row => {
+        if (row == null) {
+            return;
+        }
+        
         if (state[row.type] == undefined) {
             state[row.type] = [];
         }
@@ -33,6 +37,7 @@ module.exports.processInput = function processInput(state = {}, data) {
 
     Object.keys(state).forEach(key => {
         state[key].sort(sortRowFn);
+        state[key] = trimData(state[key]);
     });
     
     return state;
@@ -40,10 +45,18 @@ module.exports.processInput = function processInput(state = {}, data) {
 
 function sortRowFn(a, b) {
     if (a.time > b.time) {
-        return -1;
-    }
-    if (a.time < b.time) {
         return 1;
     }
+    if (a.time < b.time) {
+        return -1;
+    }
     return 0;
+}
+
+// Trim the dataset so only 100 elements remain.
+function trimData(dataset) {
+    if (dataset.length > 100) {
+        return dataset.slice(dataset.length - 100);
+    }
+    return dataset;
 }

@@ -12,6 +12,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "lodash": "^4.17.11",
+    "loglevel": "^1.6.1",
     "nodemon": "^1.18.5",
     "socket.io": "^2.1.1"
   },
